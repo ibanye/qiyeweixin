@@ -1,0 +1,21 @@
+{
+    "name": "yitian/qiyeweixin",
+    "description": "基于Laravel Socialite的企业微信OAuth2认证",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "ibanye",
+            "email": "ibanye@qq.com"
+        }
+    ],
+    "require": {
+        "php": "^7.0",
+        "socialiteproviders/manager": "~2.1",
+        "jenssegers/agent":"~3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "YitianProviders\\Weixin\\": "src/"
+        }
+    }
+}
