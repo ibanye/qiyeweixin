@@ -4,7 +4,7 @@ namespace YitianProviders\Weixin;
 
 use SocialiteProviders\Manager\SocialiteWasCalled;
 
-class WeixinExtendSocialite
+class QYWXExtendSocialite
 {
     /**
      * Register the provider.

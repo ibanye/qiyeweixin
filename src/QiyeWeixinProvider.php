@@ -56,19 +56,6 @@ class QiyeWeixin extends AbstractProvider implements ProviderInterface
         }
         $user = $this->request->cookie(self::USER_COOKIE_NAME);
         if ($user instanceof WeixinUser) {
-            /*        $response = $this->getAccessTokenResponse($this->getCode());
-
-                    $user = $this->mapUserToObject($this->getUserByToken(
-                        $token = $this->parseAccessToken($response)
-                    ));
-
-                    $this->credentialsResponseBody = $response;
-
-
-                    return $user->setToken($token)
-                        ->setRefreshToken($this->parseRefreshToken($response))
-                        ->setExpiresIn($this->parseExpiresIn($response));*/
-
             return $user;
         }
     }
