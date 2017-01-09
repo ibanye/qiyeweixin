@@ -44,7 +44,7 @@ class QiyeWeixin extends AbstractProvider implements ProviderInterface
     protected $source = 'wx';
 
     /**
-     * @return \SocialiteProviders\Manager\OAuth2\User
+     * @return WeixinUser
      */
     public function user()
     {
@@ -72,8 +72,6 @@ class QiyeWeixin extends AbstractProvider implements ProviderInterface
         if (strpos(Agent::getUserAgent(), 'MicroMessenger') === false) {
             return redirect()->guest('redirect?url=' . urlencode($this->getAuthUrl($state)));
         } else {
-            logger('三方库准备跳转');
-
             $response = new RedirectResponse($this->getAuthUrl($state), 302, [
                 'Set-Cookie' => implode('', [
                     $this->state_cookie_name,
@@ -89,7 +87,6 @@ class QiyeWeixin extends AbstractProvider implements ProviderInterface
             session()->put('url.intended', request()->fullUrl());
             return $response;
         }
-
     }
 
     public function PcCallback()
@@ -157,7 +154,6 @@ class QiyeWeixin extends AbstractProvider implements ProviderInterface
                 'department' => $user['department'],
                 'name' => $user['name'],
                 'weixinid' => $user['weixinid'],
-//                'nickname' => isset($user['nickname']) ? $user['nickname'] : null,
                 'avatar' => $user['avatar']??null,
                 'name' => $user['nickname']??'',
                 'email' => $user['email']??'',
@@ -218,8 +214,6 @@ class QiyeWeixin extends AbstractProvider implements ProviderInterface
             return json_decode($response->getBody(), true);
         }
         return '';
-
-        //        https://qyapi.weixin.qq.com/cgi-bin/user/get?access_token=ACCESS_TOKEN&userid=USERID
     }
 
     public function check()
@@ -250,7 +244,6 @@ class QiyeWeixin extends AbstractProvider implements ProviderInterface
     protected function getTokenUrl()
     {
         return 'https://qyapi.weixin.qq.com/cgi-bin/gettoken';
-        //https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=id&corpsecret=secrect
     }
 
     /**
@@ -263,18 +256,13 @@ class QiyeWeixin extends AbstractProvider implements ProviderInterface
         return [
             'corpid' => $this->corpId,
             'corpsecret' => $this->corpSecret,
-//            'secret' => $this->clientSecret,
-//            'code' => $code, 'grant_type' => 'authorization_code',
         ];
-        //
     }
 
     protected function getCode()
     {
         if (strpos(Agent::getUserAgent(), 'MicroMessenger') === false) {
             $this->source = 'pc';
-//            $code = $this->request->input('auth_code');
-//            logger("PC模式，得到授权码$code");
             return $this->request->input('auth_code');
         } else {
             $this->source = 'wx';
@@ -344,10 +332,6 @@ class QiyeWeixin extends AbstractProvider implements ProviderInterface
         }
         return $this->buildAuthUrlFromBase($this->auth_url, $state);
     }
-    //===========================================================
-    //以下为public方法，外部可根据需要调用
-
-    //===========================================================
 
     /**
      * 获取授权地址中要传递的参数
