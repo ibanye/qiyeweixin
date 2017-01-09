@@ -36,11 +36,11 @@ class QiyeWeixin extends AbstractProvider implements ProviderInterface
     //授权state的cookie有效时长
     protected $state_cookie_time = 5 * 60;
     protected $wxUser;
-    protected $callback_token = "40qFOgvyI9dbGt";
-    protected $encodingAesKey = "D6D2QVutbXSzrpv3HZY7Cfg8JenvgTmwcFauO0sJjXH";
-    protected $corpId = "wxb3ea4bf8d0998243";
+    protected $callback_token = "";
+    protected $encodingAesKey = "";
+    protected $corpId = "";
     protected $access_token = '';
-    protected $corpSecret = 'ACqfrAFvXBeRpCueJo5gsnR9O7ZPitYUdEKO0chhRlGa-tSOOLvzVb3iNijuXe2D';
+    protected $corpSecret = '';
     protected $source = 'wx';
 
     /**
@@ -456,7 +456,10 @@ class QiyeWeixin extends AbstractProvider implements ProviderInterface
         $this->clientSecret = $config['client_secret'];
         $this->redirectUrl = $config['redirect'];
         $this->proxy_url = $config['proxy_url'];
-
+        $this->callback_token = $config['callback_token'];
+        $this->encodingAesKey = $config['encodingAesKey'];
+        $this->corpId = $config['corpId'];
+        $this->corpSecret = $config['corpSecret'];
         if (isset($config['proxy_url'])) {
             $this->proxy_url = $config['proxy_url'];
         }
