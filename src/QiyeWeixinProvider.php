@@ -444,18 +444,10 @@ class QiyeWeixinProvider extends AbstractProvider implements ProviderInterface
         $this->encodingAesKey = $config['encodingAesKey']??'';
         $this->corpId = $config['corpId']??'';
         $this->corpSecret = $config['corpSecret']??'';
-        if (isset($config['proxy_url'])) {
-            $this->proxy_url = $config['proxy_url'];
-        }
-        if (isset($config['device'])) {
-            $this->device = $config['device'];
-        }
-        if (isset($config['state_cookie_name'])) {
-            $this->state_cookie_name = $config['state_cookie_name'];
-        }
-        if (isset($config['state_cookie_time'])) {
-            $this->state_cookie_time = $config['state_cookie_time'];
-        }
+        $this->proxy_url = $config['proxy_url']??'';
+        $this->device = $config['device']??'';
+        $this->state_cookie_name = $config['state_cookie_name']??'';
+        $this->state_cookie_time = $config['state_cookie_time']??'';
 
         return $this;
     }
