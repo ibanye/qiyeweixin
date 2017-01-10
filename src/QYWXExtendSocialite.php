@@ -1,6 +1,6 @@
 <?php
 
-namespace YitianProviders\Weixin;
+namespace YitianProviders\QiyeWeixin;
 
 use SocialiteProviders\Manager\SocialiteWasCalled;
 

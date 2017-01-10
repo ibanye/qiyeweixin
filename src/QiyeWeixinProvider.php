@@ -1,6 +1,6 @@
 <?php
 
-namespace YitianProviders\Weixin;
+namespace YitianProviders\QiyeWeixin;
 
 use App\WeixinUser;
 use Illuminate\Support\Facades\Cookie;
@@ -11,7 +11,7 @@ use SocialiteProviders\Manager\OAuth2\AbstractProvider;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use GuzzleHttp\ClientInterface;
 
-class QiyeWeixin extends AbstractProvider implements ProviderInterface
+class QiyeWeixinProvider extends AbstractProvider implements ProviderInterface
 {
     /**
      * Provider标识
