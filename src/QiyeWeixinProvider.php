@@ -440,10 +440,10 @@ class QiyeWeixinProvider extends AbstractProvider implements ProviderInterface
         $this->clientSecret = $config['client_secret'];
         $this->redirectUrl = $config['redirect'];
         $this->proxy_url = $config['proxy_url'];
-        $this->callback_token = $config['callback_token'];
-        $this->encodingAesKey = $config['encodingAesKey'];
-        $this->corpId = $config['corpId'];
-        $this->corpSecret = $config['corpSecret'];
+        $this->callback_token = $config['callback_token']??'';
+        $this->encodingAesKey = $config['encodingAesKey']??'';
+        $this->corpId = $config['corpId']??'';
+        $this->corpSecret = $config['corpSecret']??'';
         if (isset($config['proxy_url'])) {
             $this->proxy_url = $config['proxy_url'];
         }
