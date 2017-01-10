@@ -11,7 +11,7 @@
     "require": {
         "php": "^7.0",
         "socialiteproviders/manager": "~2.1",
-        "jenssegers/agent":"~3.0"
+        "jenssegers/agent":"~2.4"
     },
     "autoload": {
         "psr-4": {
