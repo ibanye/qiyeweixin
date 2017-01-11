@@ -27,8 +27,6 @@ class QiyeWeixinProvider extends AbstractProvider implements ProviderInterface
     protected $scopes = ['snsapi_login'];
     //代理授权回调的地址
     protected $proxy_url = '';
-    //PC端还是移动端
-    protected $device = '';
     //授权地址
     protected $auth_url = '';
     //授权state的cookie名称
@@ -38,9 +36,7 @@ class QiyeWeixinProvider extends AbstractProvider implements ProviderInterface
     protected $wxUser;
     protected $callback_token = "";
     protected $encodingAesKey = "";
-    protected $corpId = "";
     protected $access_token = '';
-    protected $corpSecret = '';
     protected $source = 'wx';
 
     /**
@@ -112,13 +108,9 @@ class QiyeWeixinProvider extends AbstractProvider implements ProviderInterface
     {
         // TODO: 微信验证回调函数
         $code = $this->getCode();
-        logger("开始取TOKEN，CODE：" . $code);
         $this->getAccessTokenResponse('');
-        logger("取TOKEN结束");
         if ($this->mapUserToObject($this->getUserByToken($code)) == 0) {
-            logger('存储用户COOKIE');
             Cookie::queue(self::USER_COOKIE_NAME, $this->wxUser, 300);
-            logger('存储结束，准备跳转原始访问页面');
             return redirect()->intended('/');
 
         };
@@ -203,8 +195,6 @@ class QiyeWeixinProvider extends AbstractProvider implements ProviderInterface
 
         }
         if ($userId <> '') {
-            logger("PC回调获取用户Code为：$code,ID为：$userId");
-
             $response = $this->getHttpClient()->get('https://qyapi.weixin.qq.com/cgi-bin/user/get', [
                 'query' => [
                     'access_token' => $this->access_token,
@@ -254,8 +244,8 @@ class QiyeWeixinProvider extends AbstractProvider implements ProviderInterface
     protected function getTokenFields($code)
     {
         return [
-            'corpid' => $this->corpId,
-            'corpsecret' => $this->corpSecret,
+            'corpid' => $this->clientId,
+            'corpsecret' => $this->clientSecret,
         ];
     }
 
@@ -353,15 +343,13 @@ class QiyeWeixinProvider extends AbstractProvider implements ProviderInterface
             ];
         } elseif ($this->source === 'pc') {
             $options = [
-                'corp_id' => $this->corpId,
+                'corp_id' => $this->clientId,
                 'redirect_uri' => $this->redirectUrl,
                 'usertype' => 'all',
                 'state' => $state,
             ];
         }
-        if (!empty($this->proxy_url)) {
-            $options['device'] = $this->device;
-        }
+
 
         return $options;
     }
@@ -380,12 +368,10 @@ class QiyeWeixinProvider extends AbstractProvider implements ProviderInterface
             if ($this->access_token <> '') return;
         }
         $query = $this->getTokenFields($code);
-        logger("TOKEN查询字串  time:" . time() . request()->fullUrl() . ':', $query);
         $response = $this->getHttpClient()->get($this->getTokenUrl(), [
             'query' => $query,
         ]);
         $this->credentialsResponseBody = json_decode($response->getBody(), true);
-        logger('TOKEN查询回调数据' . time() . request()->fullUrl() . '：', $this->credentialsResponseBody);
         $this->access_token = $this->credentialsResponseBody['access_token'];
         /*        {
                     "access_token": "accesstoken000001",
@@ -409,7 +395,7 @@ class QiyeWeixinProvider extends AbstractProvider implements ProviderInterface
      */
     public static function additionalConfigKeys()
     {
-        return ['corpid', 'proxy_url', 'device', 'state_cookie_name', 'state_cookie_time'];
+        return ['proxy_url', 'state_cookie_name', 'state_cookie_time'];
     }
 
     /**
@@ -442,10 +428,7 @@ class QiyeWeixinProvider extends AbstractProvider implements ProviderInterface
         $this->proxy_url = $config['proxy_url'];
         $this->callback_token = $config['callback_token']??'';
         $this->encodingAesKey = $config['encodingAesKey']??'';
-        $this->corpId = $config['corpId']??'';
-        $this->corpSecret = $config['corpSecret']??'';
         $this->proxy_url = $config['proxy_url']??'';
-        $this->device = $config['device']??'';
         $this->state_cookie_name = $config['state_cookie_name']??'';
         $this->state_cookie_time = $config['state_cookie_time']??'';
 
